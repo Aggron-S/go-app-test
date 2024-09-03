@@ -14,13 +14,13 @@ RUN go mod download
 COPY . .
 
 # Build the Go application
-RUN go build -o hello_world ./cmd/main.go
+RUN go build -o out ./cmd/main.go
 
 # Use a minimal base image for the final stage
 FROM scratch
 
 # Copy the built binary from the builder stage
-COPY --from=builder /app/hello_world /app/hello_world
+COPY --from=builder /app/out /app/out
 
 # Command to run the executable
-CMD ["/app/hello_world"]
+CMD ["/app/out"]
