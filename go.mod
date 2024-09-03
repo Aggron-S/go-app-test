@@ -1,3 +1,3 @@
-module github.com/melkey/goProjectStructure
+module github.com/Aggron-S/go-app-test
 
 go 1.23.0
