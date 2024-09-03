@@ -16,8 +16,8 @@ COPY . .
 # Build the Go application
 RUN go build -o out ./cmd/main.go
 
-# Use a minimal base image for the final stage
-FROM scratch
+# Use a more complete base image for the final stage
+FROM alpine:latest
 
 # Copy the built binary from the builder stage
 COPY --from=builder /app/out /app/out
