@@ -2,17 +2,15 @@ package main
 
 import (
     "fmt"
+    "log"
     "net/http"
+    "myapp/routes"
 )
 
-func helloHandler(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprintf(w, "Hello, World!")
-}
-
 func main() {
-    http.HandleFunc("/", helloHandler)
+    mux := routes.NewRouter()
     fmt.Println("Starting server on :8080")
-    if err := http.ListenAndServe(":8080", nil); err != nil {
-        fmt.Println("Error starting server:", err)
+    if err := http.ListenAndServe(":8080", mux); err != nil {
+        log.Fatal("Error starting server:", err)
     }
 }
