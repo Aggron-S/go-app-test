@@ -1,17 +1,27 @@
-FROM golang:1.20-alpine as BUILDER
-WORKDIR /src/
+# Use a Go base image
+FROM golang:1.23-alpine AS builder
+
+# Set the Current Working Directory inside the container
+WORKDIR /app
+
+# Copy the go.mod and go.sum files
+COPY go.mod ./
+
+# Download Go module dependencies
+RUN go mod download
+
+# Copy the rest of the application code
 COPY . .
+
+# Build the Go application
 RUN go build -o out ./cmd/main.go
 
-FROM golang:1.20-alpine
-RUN go version
-WORKDIR /go/src/golang-baseapp
-COPY --from=BUILDER \
-  /src/webserver \
-  /go/src/golang-baseapp/
+# Use a more complete base image for the final stage
+FROM golang:1.23-alpine
 
-RUN chmod +x /go/src/golang-baseapp/webserver
+# Copy the built binary from the builder stage
+COPY --from=builder /app/out /app/out
 
-EXPOSE 8080
+# Command to run the executable
+CMD ["/app/out"]
 
-CMD ["/go/src/golang-baseapp/webserver"]
